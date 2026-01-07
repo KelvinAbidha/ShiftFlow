@@ -1,0 +1,19 @@
+{
+  "tariffs": [
+    {
+      "procedure": "Normal Delivery",
+      "old_rate": 11200,
+      "new_rate": 11200
+    },
+    {
+      "procedure": "C-Section",
+      "old_rate": 32600,
+      "new_rate": 32600
+    },
+    {
+      "procedure": "MRI",
+      "old_rate": 0,
+      "new_rate": 11000
+    }
+  ]
+}
