@@ -43,3 +43,10 @@ def calculate_new_system(gross_salary: float) -> float:
     """
     contribution = gross_salary * SHIF_RATE
     return max(contribution, SHIF_FLOOR)
+
+# Tariff Examples (Procedure: Limit in KES)
+TARIFFS = {
+    "Normal Delivery": 11200,
+    "C-Section": 32600,
+    "MRI": 11000,
+}
