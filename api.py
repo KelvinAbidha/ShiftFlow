@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from logic import SalaryInput, ContributionOutput, calculate_old_system, calculate_new_system
+from logic import SalaryInput, ContributionOutput, TariffOutput, calculate_old_system, calculate_new_system, calculate_benefit_comparison
+from analysis import run_differential_analysis
 
 app = FastAPI(
     title="ShiftFlow Migration Engine",
@@ -30,3 +31,19 @@ def calculate_contribution(data: SalaryInput):
         difference=diff,
         notes=note
     )
+
+@app.get("/reimbursement/{procedure}", response_model=TariffOutput)
+def translate_reimbursement_rule(procedure: str):
+    """
+    Automates the translation of reimbursement rules:
+    Returns the financial shift from Legacy NHIF to Modern SHIF for a specific procedure.
+    """
+    return calculate_benefit_comparison(procedure)
+
+@app.get("/impact/summary")
+def get_impact_summary():
+    """
+    Returns the statistical summary of the transition impact across all gazetted tariffs.
+    """
+    _, summary = run_differential_analysis()
+    return summary
