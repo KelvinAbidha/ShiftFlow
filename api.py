@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from logic import SalaryInput, ContributionOutput, TariffOutput, calculate_old_system, calculate_new_system, calculate_benefit_comparison
 from analysis import run_differential_analysis
+from tasks import process_bulk_payroll
 
 app = FastAPI(
     title="ShiftFlow Migration Engine",
@@ -47,3 +48,13 @@ def get_impact_summary():
     """
     _, summary = run_differential_analysis()
     return summary
+
+@app.post("/simulate/bulk")
+def trigger_bulk_simulation(input_file: str = "large_payroll.csv"):
+    """
+    Triggers an asynchronous Celery task to process a large payroll file.
+    Returns the Task ID for tracking.
+    """
+    output_file = input_file.replace(".csv", "_processed.csv")
+    task = process_bulk_payroll.delay(input_file, output_file)
+    return {"task_id": task.id, "status": "Processing started", "output_target": output_file}
